@@ -18,6 +18,18 @@ A Kotlin Multiplatform application showcasing UNESCO World Heritage Sites with r
 - Wallpaper integration (Android)
 - Offline-first with local SQLite database
 
+### [HerbalRedo](https://github.com/WhitelabelEducationApps/HerbalRedo)
+A whitelabel Kotlin Multiplatform application for educational content about herbs, plants, and botanical knowledge.
+
+**Tech Stack:** Kotlin Multiplatform • Compose Multiplatform • Room 3 • Clean Architecture
+
+**Features:**
+- Categorized herbal and botanical content
+- Offline-first with local SQLite database
+- Cross-platform support (iOS & Android)
+- Whitelabel configuration for content customization
+- Clean, reusable architecture for extensibility
+
 ## Shared Libraries
 
 ### [whitelabel-platform](https://github.com/WhitelabelEducationApps/whitelabel-platform)
