@@ -1,101 +1,69 @@
 # Whitelabel Education Apps
 
-Building reusable, multiplatform educational applications for cultural heritage sites.
+Building reusable, multiplatform educational applications powered by shared whitelabel modules.
 
-## Projects
+## Apps
 
 ### [MuseumKMP](https://github.com/WhitelabelEducationApps/MuseumKMP)
-A Kotlin Multiplatform application showcasing UNESCO World Heritage Sites with rich multilingual content, maps, search, and personalization features.
-
-**Tech Stack:** Kotlin Multiplatform • Compose Multiplatform • SQLDelight • Clean Architecture
-
-**Features:**
-- 1,200+ UNESCO World Heritage Sites
-- 10+ languages (English, French, Spanish, German, Italian, Portuguese, Russian, Arabic, Chinese, Japanese)
-- Interactive maps with site clustering
-- Advanced search and filtering
-- Favorites & personalization
-- Wallpaper integration (Android)
-- Offline-first with local SQLite database
+UNESCO World Heritage Sites - 1,150+ sites across 10 languages with interactive maps, search, favorites, and wallpaper integration. Groups items by country.
 
 ### [HerbalRedo](https://github.com/WhitelabelEducationApps/HerbalRedo)
-A whitelabel Kotlin Multiplatform application for educational content about herbs, plants, and botanical knowledge.
+Medicinal plants encyclopedia - 600+ plants across 12 languages with category grouping, location-based filtering, and botanical knowledge.
 
-**Tech Stack:** Kotlin Multiplatform • Compose Multiplatform • Room 3 • Clean Architecture
-
-**Features:**
-- Categorized herbal and botanical content
-- Offline-first with local SQLite database
-- Cross-platform support (iOS & Android)
-- Whitelabel configuration for content customization
-- Clean, reusable architecture for extensibility
+Both apps are thin shells: a custom Application class, a one-line Activity, app-specific string resources, a pre-built SQLite database, and a Koin module that wires AppConfig + an optional custom ItemGrouper. All shared logic lives in the whitelabel modules below.
 
 ## Shared Libraries
 
-### [whitelabel-platform](https://github.com/WhitelabelEducationApps/whitelabel-platform)
-Reusable KMP library with core components, utilities, and abstractions for building heritage site applications.
-
-**Includes:**
-- Localization & language management
-- Generic UI components & Material Design 3 theming
-- Platform services (wallpaper, image preloading, color extraction)
-- Utilities (logging, strings, colors, context helpers)
-
 ### [whitelabel-core](https://github.com/WhitelabelEducationApps/whitelabel-core)
-Core domain logic, data layer abstractions, and business use cases shared across applications.
+Domain abstractions and base ViewModels shared across all apps.
 
-**Includes:**
-- Domain models & repositories
-- Use cases & business logic
-- SQLDelight database schemas
-- Data source abstractions
+- DisplayableItem interface, ItemRepository<T>, Result type
+- HomeViewModel<T> with search, language switching, reactive filtering
+- ItemDetailViewModel, LanguageSelectionViewModel
+- AppConfig feature flags (enableMap, enableCategories, enableLocationFilter)
+- ItemGrouper<T> strategy for custom item grouping per app
 
-## Architecture
+### [whitelabel-platform](https://github.com/WhitelabelEducationApps/whitelabel-platform)
+Concrete data layer, full UI, and platform services.
 
-All projects follow **Clean Architecture** with clear separation of concerns:
+- SQLDelight schema (CatalogItem, Author) and ItemRepository implementation
+- Complete Compose Multiplatform UI: home grid, detail screen, language picker, map, navigation
+- WhitelabelActivity base class, AppNavigation, Material Design 3 theme
+- Platform services: wallpaper, image preloading, color extraction
+- Koin DI modules (commonModule, viewModelModule, platformModule)
+- Runtime string resource lookup via getStringResource()
 
-```
-Presentation Layer (UI, ViewModels, Screens)
-    ↓
-Domain Layer (Use Cases, Repositories, Models)
-    ↓
-Data Layer (Data Sources, Database, Network)
-```
+## How It Works
+
+Each app includes both whitelabel modules as git submodules wired through Gradle composite builds (includeBuild()). The app's Koin module loads last, overriding bindings from the whitelabel modules.
 
 ## Tech Stack
 
-- **Language:** Kotlin Multiplatform (KMP)
+- **Language:** Kotlin Multiplatform (KMP) 2.x
 - **UI:** Jetpack Compose Multiplatform
-- **Database:** SQLDelight with Room 3 (KSP, SQLiteDriver)
-- **Async:** Coroutines & Flow
-- **DI:** Manual DI with AppModule pattern
+- **Database:** SQLDelight (via whitelabel-core schema)
+- **Async:** Coroutines and Flow
+- **DI:** Koin 4.0
 - **Design:** Material Design 3
 
 ## Getting Started
 
-### Clone with Submodules
-```bash
+Clone any app with submodules:
+
 git clone --recursive https://github.com/WhitelabelEducationApps/MuseumKMP.git
-cd MuseumKMP
-```
 
-### Build & Run
-```bash
-# Sync dependencies
-./gradlew build
+Build and run:
 
-# Run Android app
 ./gradlew :androidApp:installDebug
-```
 
 ## Vision
 
-Create a suite of educational applications for cultural heritage sites that are:
-- **Reusable** — Shared libraries minimize code duplication
-- **Multiplatform** — iOS & Android from single codebase
-- **Scalable** — Easy to add new educational applications
-- **Accessible** — Multilingual and inclusive design
-- **Offline-first** — Work without constant internet
+A suite of educational applications that are:
+- **Reusable** - shared whitelabel modules eliminate code duplication
+- **Multiplatform** - iOS and Android from a single codebase
+- **Scalable** - new apps need only content, config, and a grouper
+- **Accessible** - multilingual and inclusive design
+- **Offline-first** - work without constant internet
 
 ## Contributing
 
@@ -107,5 +75,5 @@ Projects are open-source. See individual repositories for license details.
 
 ---
 
-**Organization Lead:** [@rsavutiu](https://github.com/rsavutiu)  
-**Last Updated:** April 2026
+**Organization Lead:** [@rsavutiu](https://github.com/rsavutiu)
+**Last Updated:** May 2026
